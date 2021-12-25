@@ -5,6 +5,7 @@ go 1.13
 require (
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/gin-gonic/gin v1.7.7
+	github.com/go-playground/validator/v10 v10.4.1
 	github.com/jinzhu/gorm v1.9.16
 	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
