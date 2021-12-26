@@ -1,4 +1,4 @@
-package error_code
+package errcode
 
 // 全局共享的错误码在这里统一管理, 便于增删和查看
 var (
