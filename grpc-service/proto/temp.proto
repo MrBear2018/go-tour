@@ -1,0 +1,72 @@
+syntax = "proto3";
+package proto;
+
+service Cheese {
+    rpc Login (LoginRequest) returns (LoginReply) {}
+    rpc Register (RegisterRequest) returns (RegisterReply) {}
+    rpc Play(PlayRequest) returns (PlayReply){}
+    rpc Surrender(SurrenderRequest) returns(SurrenderReply){}
+    rpc GetChessBoard(ChessBoardRequest)returns (ChessBoardReplay){}
+}
+
+message LoginRequest{
+    string loginName = 1;
+    string passWord = 2;
+}
+
+message LoginReply {
+    int64 code = 1;
+    string message = 2;
+}
+
+message RegisterRequest{
+    string loginName = 1;
+    string passWord = 2;
+}
+
+message RegisterReply {
+    int64 code = 1;
+    string message = 2;
+}
+
+// user标识当前下棋的用户， 注意需要做一个全局原子量来控制谁能成功下棋，否则某个人可以疯狂调用这个接口
+// row 和 column 表示这个人下的位置
+message PlayRequest{
+    int64 user = 1; // 可以改成 string
+    int64 row = 2;
+    int64 column =3;
+}
+
+// 注意，好像缺一个开始棋局的方法， 但是这个怎么写呢？ 好像要写一个push方法，不然A咋知道棋局已经开始了？总不能一直等待， 或者轮训也可以。
+
+// errorCode 返回错误码，例如棋局未开始 -3, 棋局已结束 -1, 内部错误 -2, 操作成功 1, 非法操作 2
+// gameAns 下棋之后应该直接获取这一局的结果（win 1, failed-1, unKnow Ans 0）
+// 当棋结束之后，继续访问这个接口，应当返回上一次结束的棋的结果；
+// 因为A赢棋之后返回值为 {1, 1},它再调用这个接口还是返回{1, 1}，B还要调用这个接口才知道自己返回值为{2, -1}
+// 建议增加一个棋局的id， 这样可以获取某一个棋局的结果
+message PlayReply{
+    int64 errorCode = 1;
+    int64 gameAns = 2;
+}
+
+message SurrenderRequest{
+    int64 user = 1; // ke yi gai cheng string
+}
+
+message SurrenderReply{
+    int64 errorCode = 1;
+    int64 gameAns = 2;
+}
+
+message ChessBoardRequest{}
+
+message Point {
+    int64 row = 1;
+    int64 column = 2;
+    int64 status = 3; // 0表示空即没有棋子， 1表示归属于A ，2标识归属于B；
+    int64 chessType = 4; // 标识棋子类型，例如黑白棋就是 0,1 ， 象棋就是1 帅， 2 象， 3 炮 等等
+}
+
+message ChessBoardReplay{
+    repeated Point points = 1;
+}
