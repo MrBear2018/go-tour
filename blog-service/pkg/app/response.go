@@ -1,8 +1,8 @@
-package response
+package app
 
 import (
 	"github.com/gin-gonic/gin"
-	errCode "github.com/go-tour/blog-service/utils/error_code"
+	errCode "github.com/go-tour/blog-service/pkg/error_code"
 	"net/http"
 )
 
